@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Login from './src/Login';
+import SignUp from './src/SignUp';
 
-const App = () => <Login />;
+const App = () => <SignUp />;
 
 export default App;
