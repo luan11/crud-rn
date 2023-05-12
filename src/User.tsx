@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -18,13 +19,15 @@ type Fields = {
 
 type AllowedFields = `name` | `username` | `password` | `passwordConfirm`;
 
-const SignUp = () => {
+const UserScreen = () => {
   const [fields, setFields] = useState<Fields>({
     name: ``,
     username: ``,
     password: ``,
     passwordConfirm: ``,
   });
+
+  const navigation = useNavigation<any>();
 
   const handleOnChangeField = (fieldName: AllowedFields) => (value: string) =>
     setFields((current) => ({ ...current, [fieldName]: value }));
@@ -40,12 +43,18 @@ const SignUp = () => {
       return Alert.alert(`The passwords aren't equals!`);
     }
 
-    return Alert.alert(`Succesfully created!`);
+    return navigation.navigate(`Home`);
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <></>,
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Sing up page</Text>
+      <Text>Create a new user</Text>
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Name:</Text>
@@ -117,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+export default UserScreen;

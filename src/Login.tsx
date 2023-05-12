@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import {
   View,
@@ -9,9 +10,11 @@ import {
   Alert,
 } from 'react-native';
 
-const Login = () => {
+const LoginScreen = () => {
   const [username, setUsername] = useState(``);
   const [password, setPassword] = useState(``);
+
+  const navigation = useNavigation<any>();
 
   const handleOnChangeUsername = (text: string) => setUsername(text);
 
@@ -19,7 +22,7 @@ const Login = () => {
 
   const signIn = () => {
     if (username === `luanzera` && password === `12345`) {
-      Alert.alert(`Successfully logged!`);
+      navigation.navigate(`Home`);
     } else {
       Alert.alert(`Username and/or password incorrect!`);
     }
@@ -80,4 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default LoginScreen;
