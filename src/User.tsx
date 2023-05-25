@@ -33,7 +33,7 @@ const UserScreen = () => {
   const handleOnChangeField = (fieldName: AllowedFields) => (value: string) =>
     setFields((current) => ({ ...current, [fieldName]: value }));
 
-  const signUp = async () => {
+  const signUp = () => {
     const fieldsValues = Object.values(fields);
 
     if (fieldsValues.some((fieldValue) => !fieldValue)) {
@@ -44,17 +44,18 @@ const UserScreen = () => {
       return Alert.alert(`The passwords aren't equals!`);
     }
 
-    const registered = await userService.register(
-      fields.name,
-      fields.username,
-      fields.password
-    );
-
-    if (registered) {
-      return navigation.navigate(`Home`);
-    }
-
-    return Alert.alert(`An error has occurred in the registration.`);
+    userService
+      .register(fields.name, fields.username, fields.password)
+      .then((registered) => {
+        if (registered) {
+          navigation.navigate(`Home`);
+        } else {
+          Alert.alert(`An error has occurred in the registration.`);
+        }
+      })
+      .catch(() => {
+        Alert.alert(`An error has occurred in the registration.`);
+      });
   };
 
   useEffect(() => {

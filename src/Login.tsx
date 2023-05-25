@@ -21,14 +21,19 @@ const LoginScreen = () => {
 
   const handleOnChangePassword = (pass: string) => setPassword(pass);
 
-  const signIn = async () => {
-    const logged = await authService.login(username, password);
-
-    if (logged) {
-      navigation.navigate(`Home`);
-    } else {
-      Alert.alert(`Username and/or password incorrect!`);
-    }
+  const signIn = () => {
+    authService
+      .login(username, password)
+      .then((logged) => {
+        if (logged) {
+          navigation.navigate(`Home`);
+        } else {
+          Alert.alert(`Username and/or password incorrect!`);
+        }
+      })
+      .catch(() => {
+        Alert.alert(`Username and/or password incorrect!`);
+      });
   };
 
   return (
