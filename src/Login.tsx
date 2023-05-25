@@ -9,6 +9,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
+import { authService } from './services/auth.service';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState(``);
@@ -20,8 +21,10 @@ const LoginScreen = () => {
 
   const handleOnChangePassword = (pass: string) => setPassword(pass);
 
-  const signIn = () => {
-    if (username === `luanzera` && password === `12345`) {
+  const signIn = async () => {
+    const logged = await authService.login(username, password);
+
+    if (logged) {
       navigation.navigate(`Home`);
     } else {
       Alert.alert(`Username and/or password incorrect!`);
