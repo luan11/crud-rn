@@ -9,6 +9,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
+import { userService } from './services/user.service';
 
 type Fields = {
   name: string;
@@ -32,7 +33,7 @@ const UserScreen = () => {
   const handleOnChangeField = (fieldName: AllowedFields) => (value: string) =>
     setFields((current) => ({ ...current, [fieldName]: value }));
 
-  const signUp = () => {
+  const signUp = async () => {
     const fieldsValues = Object.values(fields);
 
     if (fieldsValues.some((fieldValue) => !fieldValue)) {
@@ -43,7 +44,17 @@ const UserScreen = () => {
       return Alert.alert(`The passwords aren't equals!`);
     }
 
-    return navigation.navigate(`Home`);
+    const registered = await userService.register(
+      fields.name,
+      fields.username,
+      fields.password
+    );
+
+    if (registered) {
+      return navigation.navigate(`Home`);
+    }
+
+    return Alert.alert(`An error has occurred in the registration.`);
   };
 
   useEffect(() => {
