@@ -45,16 +45,16 @@ const UserScreen = () => {
     }
 
     userService
-      .register(fields.name, fields.username, fields.password)
-      .then((registered) => {
-        if (registered) {
-          navigation.navigate(`Home`);
-        } else {
-          Alert.alert(`An error has occurred in the registration.`);
-        }
+      .register({
+        name: fields.name,
+        username: fields.username,
+        password: fields.password,
       })
-      .catch(() => {
-        Alert.alert(`An error has occurred in the registration.`);
+      .then(() => {
+        navigation.goBack();
+      })
+      .catch((error) => {
+        Alert.alert(String(error));
       });
   };
 
