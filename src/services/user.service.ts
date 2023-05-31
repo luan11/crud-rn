@@ -38,7 +38,21 @@ class UserService {
     }
   }
 
-  public async update(id: number, user: User) {}
+  public async update(id: number, user: User) {
+    const headers = await this.getHeaders();
+
+    const res = await fetch(`${this.url}/${id}`, {
+      method: `PUT`,
+      headers,
+      body: JSON.stringify(user),
+    });
+
+    const data = await res.json();
+
+    if (!data?.name) {
+      throw new Error(data?.message);
+    }
+  }
 
   public async remove(id: number) {
     const headers = await this.getHeaders();

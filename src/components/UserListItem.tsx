@@ -6,6 +6,7 @@ import {
   View,
   Button,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -61,7 +62,7 @@ export const UserListItem = ({
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = () => {
-    navigation.navigate(`User`, { id });
+    navigation.navigate(`User`, { id, name, username });
   };
 
   const handleDelete = async () => {
@@ -79,7 +80,7 @@ export const UserListItem = ({
   };
 
   return (
-    <View style={styles.item} onTouchEnd={handleEdit}>
+    <TouchableOpacity style={styles.item} onPress={handleEdit}>
       <View style={styles.data}>
         <Text style={styles.dataId}>#{id}</Text>
         <Text style={styles.dataName}>{name}</Text>
@@ -96,6 +97,6 @@ export const UserListItem = ({
           />
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };

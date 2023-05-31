@@ -12,9 +12,10 @@ type User = {
   username: string;
 };
 
-export default function HomeScreen() {
+export default function HomeScreen({ route: { params } }: any) {
   const navigation = useNavigation<any>();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [refetchController, setRefetchController] = useState(0);
 
@@ -25,12 +26,16 @@ export default function HomeScreen() {
 
   useEffect(() => {
     const getUsers = async () => {
+      setIsLoading(true);
+
       try {
         const data = await userService.list();
 
         setUsers(data);
       } catch (error) {
         Alert.alert(String(error));
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -57,22 +62,32 @@ export default function HomeScreen() {
     });
   }, []);
 
+  useEffect(() => {
+    if (params?.refetch) {
+      setRefetchController((current) => current + 1);
+    }
+  }, [params]);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
 
       <Text>Users list</Text>
 
-      <FlatList
-        data={users}
-        renderItem={({ item: user }) => (
-          <UserListItem
-            {...user}
-            canDelete={users.length > 1}
-            refetch={refetch}
-          />
-        )}
-      />
+      {isLoading ? (
+        <Text>Getting users...</Text>
+      ) : (
+        <FlatList
+          data={users}
+          renderItem={({ item: user }) => (
+            <UserListItem
+              {...user}
+              canDelete={users.length > 1}
+              refetch={refetch}
+            />
+          )}
+        />
+      )}
     </View>
   );
 }

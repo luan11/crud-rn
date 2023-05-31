@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, RouteProp } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import {
   View,
@@ -21,10 +21,10 @@ type Fields = {
 
 type AllowedFields = `name` | `username` | `password` | `passwordConfirm`;
 
-const UserScreen = () => {
+const UserScreen = ({ route: { params } }: any) => {
   const [fields, setFields] = useState<Fields>({
-    name: ``,
-    username: ``,
+    name: params?.name ?? ``,
+    username: params?.username ?? ``,
     password: ``,
     passwordConfirm: ``,
   });
@@ -34,7 +34,7 @@ const UserScreen = () => {
   const handleOnChangeField = (fieldName: AllowedFields) => (value: string) =>
     setFields((current) => ({ ...current, [fieldName]: value }));
 
-  const signUp = () => {
+  const signUp = async () => {
     const fieldsValues = Object.values(fields);
 
     if (fieldsValues.some((fieldValue) => !fieldValue)) {
@@ -45,18 +45,25 @@ const UserScreen = () => {
       return Alert.alert(`The passwords aren't equals!`);
     }
 
-    userService
-      .register({
-        name: fields.name,
-        username: fields.username,
-        password: fields.password,
-      })
-      .then(() => {
-        navigation.goBack();
-      })
-      .catch((error) => {
-        Alert.alert(String(error));
-      });
+    try {
+      if (params?.id) {
+        await userService.update(params.id, {
+          name: fields.name,
+          username: fields.username,
+          password: fields.password,
+        });
+      } else {
+        await userService.register({
+          name: fields.name,
+          username: fields.username,
+          password: fields.password,
+        });
+      }
+
+      navigation.navigate(`Home`, { refetch: true });
+    } catch (error) {
+      Alert.alert(String(error));
+    }
   };
 
   useEffect(() => {
@@ -67,7 +74,7 @@ const UserScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Create a new user</Text>
+      <Text>{!params?.id ? `Create` : `Edit`} user</Text>
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Name:</Text>
@@ -84,6 +91,7 @@ const UserScreen = () => {
           style={styles.input}
           onChangeText={handleOnChangeField(`username`)}
           value={fields.username}
+          editable={!params?.id}
         />
       </View>
 
@@ -108,7 +116,11 @@ const UserScreen = () => {
       </View>
 
       <View style={styles.button}>
-        <Button title="Save" onPress={signUp} color="#34d399" />
+        <Button
+          title={!params?.id ? `Save` : `Update`}
+          onPress={signUp}
+          color="#34d399"
+        />
       </View>
     </View>
   );
