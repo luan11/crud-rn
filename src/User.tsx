@@ -9,6 +9,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
+
 import { userService } from './services/user.service';
 
 type Fields = {

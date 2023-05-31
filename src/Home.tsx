@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, FlatList, StyleSheet, Text, View } from 'react-native';
+
 import { userService } from './services/user.service';
 import { UserListItem } from './components/UserListItem';
 
@@ -15,6 +16,12 @@ export default function HomeScreen() {
   const navigation = useNavigation<any>();
 
   const [users, setUsers] = useState<User[]>([]);
+  const [refetchController, setRefetchController] = useState(0);
+
+  const refetch = useCallback(
+    () => setRefetchController((current) => current + 1),
+    []
+  );
 
   useEffect(() => {
     const getUsers = async () => {
@@ -28,7 +35,9 @@ export default function HomeScreen() {
     };
 
     getUsers();
+  }, [refetchController]);
 
+  useEffect(() => {
     navigation.setOptions({
       headerLeft: () => <></>,
       headerRight: () => (
@@ -56,7 +65,13 @@ export default function HomeScreen() {
 
       <FlatList
         data={users}
-        renderItem={({ item: user }) => <UserListItem {...user} />}
+        renderItem={({ item: user }) => (
+          <UserListItem
+            {...user}
+            canDelete={users.length > 1}
+            refetch={refetch}
+          />
+        )}
       />
     </View>
   );

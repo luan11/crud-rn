@@ -40,7 +40,18 @@ class UserService {
 
   public async update(id: number, user: User) {}
 
-  public async remove(id: number) {}
+  public async remove(id: number) {
+    const headers = await this.getHeaders();
+
+    try {
+      await fetch(`${this.url}/${id}`, {
+        method: `DELETE`,
+        headers,
+      });
+    } catch (error) {
+      throw new Error(`Failed to delete.`);
+    }
+  }
 
   public async list() {
     const headers = await this.getHeaders();
