@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import {
   Dimensions,
@@ -7,15 +8,14 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { userService } from '../services/user.service';
+import { roleService } from '../services/role.service';
 
-type UserListItemProps = {
+type RoleListItemProps = {
   id: number;
   name: string;
-  username: string;
+  description: string;
   canDelete: boolean;
   refetch: () => void;
 };
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   dataName: {
     fontSize: 16,
   },
-  dataUsername: {
+  dataDescription: {
     fontSize: 12,
     color: `#5a5a5a`,
   },
@@ -50,26 +50,26 @@ const styles = StyleSheet.create({
   },
 });
 
-export const UserListItem = ({
+export const RoleListItem = ({
   id,
   name,
-  username,
+  description,
   canDelete,
   refetch,
-}: UserListItemProps) => {
+}: RoleListItemProps) => {
   const navigation = useNavigation<any>();
 
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = () => {
-    navigation.navigate(`User`, { id, name, username });
+    navigation.navigate(`Role`, { id, name, description });
   };
 
   const handleDelete = async () => {
     setIsDeleting(true);
 
     try {
-      await userService.remove(id);
+      await roleService.remove(id);
 
       refetch();
     } catch (error) {
@@ -84,7 +84,7 @@ export const UserListItem = ({
       <View style={styles.data}>
         <Text style={styles.dataId}>#{id}</Text>
         <Text style={styles.dataName}>{name}</Text>
-        <Text style={styles.dataUsername}>@{username}</Text>
+        <Text style={styles.dataDescription}>{description}</Text>
       </View>
 
       {canDelete && (

@@ -1,5 +1,5 @@
-import { useNavigation, RouteProp } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -65,12 +65,6 @@ const UserScreen = ({ route: { params } }: any) => {
       Alert.alert(String(error));
     }
   };
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => <></>,
-    });
-  }, []);
 
   return (
     <View style={styles.container}>

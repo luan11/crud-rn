@@ -4,11 +4,12 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Dimensions,
   Alert,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import { authService } from './services/auth.service';
 
 const LoginScreen = () => {
@@ -60,7 +61,16 @@ const LoginScreen = () => {
       </View>
 
       <View style={styles.button}>
-        <Button title="Enter" onPress={signIn} />
+        <Icon.Button
+          name="login"
+          onPress={signIn}
+          backgroundColor="#4ade80"
+          style={{
+            justifyContent: `center`,
+          }}
+        >
+          Enter
+        </Icon.Button>
       </View>
     </View>
   );

@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { userService } from './services/user.service';
 import { UserListItem } from './components/UserListItem';
@@ -47,15 +48,25 @@ export default function HomeScreen({ route: { params } }: any) {
       headerLeft: () => <></>,
       headerRight: () => (
         <View style={styles.buttonGroup}>
-          <Button
-            title="Register"
+          <Icon.Button
+            name="person-add"
+            backgroundColor="#4ade80"
             onPress={() => navigation.navigate(`User`)}
-            color="#22d3ee"
+            iconStyle={{ marginRight: 0 }}
           />
-          <Button
-            title="Exit"
+
+          <Icon.Button
+            name="vpn-key"
+            backgroundColor="#fbbf24"
+            onPress={() => navigation.navigate(`Roles`)}
+            iconStyle={{ marginRight: 0 }}
+          />
+
+          <Icon.Button
+            name="logout"
+            backgroundColor="#f87171"
             onPress={() => navigation.goBack()}
-            color="#f87171"
+            iconStyle={{ marginRight: 0 }}
           />
         </View>
       ),
