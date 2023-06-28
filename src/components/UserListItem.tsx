@@ -16,6 +16,7 @@ type UserListItemProps = {
   id: number;
   name: string;
   username: string;
+  roles: string[];
   canDelete: boolean;
   refetch: () => void;
 };
@@ -54,6 +55,7 @@ export const UserListItem = ({
   id,
   name,
   username,
+  roles,
   canDelete,
   refetch,
 }: UserListItemProps) => {
@@ -62,7 +64,7 @@ export const UserListItem = ({
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = () => {
-    navigation.navigate(`User`, { id, name, username });
+    navigation.navigate(`User`, { id, name, username, roles });
   };
 
   const handleDelete = async () => {

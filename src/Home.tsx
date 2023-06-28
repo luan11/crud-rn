@@ -11,6 +11,7 @@ type User = {
   id: number;
   name: string;
   username: string;
+  roles: string[];
 };
 
 export default function HomeScreen({ route: { params } }: any) {
